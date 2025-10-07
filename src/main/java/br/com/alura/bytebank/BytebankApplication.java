@@ -56,7 +56,7 @@ public class BytebankApplication {
                 4 - Consultar saldo de uma conta
                 5 - Realizar saque em uma conta
                 6 - Realizar depósito em uma conta
-                7 - Sair
+                7  - Sair
                 """);
         return teclado.nextInt();
     }
