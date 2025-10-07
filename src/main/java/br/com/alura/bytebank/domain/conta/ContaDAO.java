@@ -38,6 +38,8 @@ public class ContaDAO {
 
 
             preparedStatement.execute();
+            preparedStatement.close();
+            conn.close();
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
@@ -45,19 +47,21 @@ public class ContaDAO {
 
     public Set<Conta> listar(){
         Set<Conta> contas = new HashSet<>();
+        PreparedStatement ps;
+        ResultSet rs;
 
         String sql = "SELECT * FROM conta";
 
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet resultSet = ps.executeQuery();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
 
-            while (resultSet.next()) {
-                Integer numero = resultSet.getInt(1);
-                BigDecimal saldo = resultSet.getBigDecimal(2);
-                String nome = resultSet.getString(3);
-                String cpf = resultSet.getString(4);
-                String email = resultSet.getString(5);
+            while (rs.next()) {
+                Integer numero = rs.getInt(1);
+                BigDecimal saldo = rs.getBigDecimal(2);
+                String nome = rs.getString(3);
+                String cpf = rs.getString(4);
+                String email = rs.getString(5);
 
                 DadosCadastroCliente dadosCadastroCliente =
                         new DadosCadastroCliente(nome, cpf, email);
@@ -65,6 +69,9 @@ public class ContaDAO {
 
                 contas.add(new Conta(numero, cliente));
             }
+            rs.close();
+            ps.close();
+            conn.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
