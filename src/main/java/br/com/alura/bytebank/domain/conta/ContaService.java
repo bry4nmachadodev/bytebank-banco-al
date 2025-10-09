@@ -2,12 +2,9 @@ package br.com.alura.bytebank.domain.conta;
 
 import br.com.alura.bytebank.domain.ConnectionFactory;
 import br.com.alura.bytebank.domain.RegraDeNegocioException;
-import br.com.alura.bytebank.domain.cliente.Cliente;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,17 +33,18 @@ public class ContaService {
         new ContaDAO(conn).salvar(dadosDaConta);
     }
 
-    public void realizarSaque(Integer numeroDaConta, BigDecimal valor) {
+    public void realizarSaque(Integer numeroDaConta, BigDecimal valorDoSaque) {
         var conta = buscarContaPorNumero(numeroDaConta);
-        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+        if (valorDoSaque.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RegraDeNegocioException("Valor do saque deve ser superior a zero!");
         }
 
-        if (valor.compareTo(conta.getSaldo()) > 0) {
+        if (valorDoSaque.compareTo(conta.getSaldo()) > 0) {
             throw new RegraDeNegocioException("Saldo insuficiente!");
         }
 
-        conta.sacar(valor);
+        Connection conn = connection.recuperarConexao();
+        new ContaDAO(conn).sacarDinheiro(conta.getNumero(), valorDoSaque);
     }
 
     public void realizarDeposito(Integer numeroDaConta, BigDecimal valor) {
