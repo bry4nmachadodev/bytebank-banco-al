@@ -126,4 +126,22 @@ public class ContaDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public void sacarDinheiro(Integer numero, BigDecimal valor){
+        PreparedStatement ps;
+        String sql = "UPDATE conta SET saldo = saldo - ? WHERE numero = ?";
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setBigDecimal(1, valor);
+            ps.setInt(2, numero);
+
+            ps.execute();
+
+            ps.close();
+            conn.close();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }
