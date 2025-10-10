@@ -51,7 +51,7 @@ public class ContaDAO {
         PreparedStatement ps;
         ResultSet rs;
 
-        String sql = "SELECT * FROM conta";
+        String sql = "SELECT * FROM conta WHERE esta_ativa = true";
 
         try {
             ps = conn.prepareStatement(sql);
@@ -82,7 +82,7 @@ public class ContaDAO {
 
     public Conta listarContaViaNumero(Integer numero){
 
-        String sql = "SELECT * FROM conta WHERE numero = ?";
+        String sql = "SELECT * FROM conta WHERE numero = ? and esta_ativa = true";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
