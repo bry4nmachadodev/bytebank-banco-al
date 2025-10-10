@@ -21,7 +21,7 @@ public class ContaDAO {
 
     public void salvar(DadosAberturaConta dadosDaConta){
         var cliente = new Cliente(dadosDaConta.dadosCliente());
-        var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente);
+        var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente, true);
 
         String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -35,6 +35,7 @@ public class ContaDAO {
             preparedStatement.setString(3,dadosDaConta.dadosCliente().nome());
             preparedStatement.setString(4, dadosDaConta.dadosCliente().cpf());
             preparedStatement.setString(5, dadosDaConta.dadosCliente().email());
+            preparedStatement.setBoolean(6,true);
 
 
             preparedStatement.execute();
@@ -62,12 +63,13 @@ public class ContaDAO {
                 String nome = rs.getString(3);
                 String cpf = rs.getString(4);
                 String email = rs.getString(5);
+                Boolean estaAtiva = rs.getBoolean(6);
 
                 DadosCadastroCliente dadosCadastroCliente =
                         new DadosCadastroCliente(nome, cpf, email);
                 Cliente cliente = new Cliente(dadosCadastroCliente);
 
-                contas.add(new Conta(numero, saldo, cliente));
+                contas.add(new Conta(numero, saldo, cliente, estaAtiva));
             }
             rs.close();
             ps.close();
@@ -93,12 +95,13 @@ public class ContaDAO {
                 String nome = rs.getString("cliente_nome");
                 String cpf = rs.getString("cliente_cpf");
                 String email = rs.getString("cliente_email");
+                Boolean estaAtiva = rs.getBoolean(6);
 
                 DadosCadastroCliente dadosCadastroCliente =
                         new DadosCadastroCliente(nome, cpf, email);
                 Cliente cliente = new Cliente(dadosCadastroCliente);
 
-                return new Conta(numeroRecuperado, saldo, cliente);
+                return new Conta(numeroRecuperado, saldo, cliente, estaAtiva);
             }
             rs.close();
             ps.close();
