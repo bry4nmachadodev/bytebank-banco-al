@@ -23,8 +23,8 @@ public class ContaDAO {
         var cliente = new Cliente(dadosDaConta.dadosCliente());
         var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente, true);
 
-        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email, esta_ativa)"+
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try{
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -114,7 +114,7 @@ public class ContaDAO {
 
     public void alterar(Integer numero, BigDecimal valor){
         PreparedStatement ps;
-        String sql = "UPDATE conta SET saldo = ? WHERE numero = ?";
+        String sql = "UPDATE conta SET saldo = saldo + ? WHERE numero = ?";
 
         try {
             ps = conn.prepareStatement(sql);
