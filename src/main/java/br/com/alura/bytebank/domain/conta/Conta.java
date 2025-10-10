@@ -61,7 +61,7 @@ public class Conta {
         return titular;
     }
 
-    public boolean EstaAtiva() {
+    public boolean getEstaAtiva() {
         return estaAtiva;
     }
 }
